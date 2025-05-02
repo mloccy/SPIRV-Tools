@@ -51,7 +51,7 @@ endif()
 if (NOT ${SPIRV_SKIP_TESTS})
   # Find gmock if we can. If it's not already configured, then try finding
   # it in external/googletest.
-  if (TARGET gmock)
+  if (TARGET ${GMockTarget})
     message(STATUS "Google Mock already configured")
   else()
     if (NOT GMOCK_DIR)
@@ -79,10 +79,10 @@ if (NOT ${SPIRV_SKIP_TESTS})
   endif()
   if (TARGET gmock)
     set(GTEST_TARGETS
-      gtest
-      gtest_main
-      gmock
-      gmock_main
+      ${GTestTarget}
+      ${GTestMainTarget}
+      ${GMockTarget}
+      ${GMockMainTarget}
     )
     foreach(target ${GTEST_TARGETS})
       set_property(TARGET ${target} PROPERTY FOLDER GoogleTest)
