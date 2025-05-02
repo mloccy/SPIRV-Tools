@@ -475,6 +475,7 @@ if(SPIRV_BUILD_FUZZER)
 
       spvtools_config_package_dir(SPIRV-Tools-fuzz PACKAGE_DIR)
       install(EXPORT SPIRV-Tools-fuzzTargets FILE SPIRV-Tools-fuzzTarget.cmake
+            NAMESPACE ${SPIRV_TOOLS_NS}
             DESTINATION ${PACKAGE_DIR})
 
       spvtools_generate_config_file(SPIRV-Tools-fuzz)

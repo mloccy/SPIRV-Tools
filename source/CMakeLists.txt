@@ -428,14 +428,14 @@ if(ENABLE_SPIRV_TOOLS_INSTALL)
   export(EXPORT ${SPIRV_TOOLS}Targets FILE ${SPIRV_TOOLS}Target.cmake)
 
   spvtools_config_package_dir(${SPIRV_TOOLS} PACKAGE_DIR)
-  install(EXPORT ${SPIRV_TOOLS}Targets FILE ${SPIRV_TOOLS}Target.cmake DESTINATION ${PACKAGE_DIR})
+  install(EXPORT ${SPIRV_TOOLS}Targets FILE ${SPIRV_TOOLS}Target.cmake NAMESPACE ${SPIRV_TOOLS_NS} DESTINATION ${PACKAGE_DIR})
 
   # Special config file for root library compared to other libs.
   file(WRITE ${CMAKE_BINARY_DIR}/${SPIRV_TOOLS}Config.cmake
     "include(\${CMAKE_CURRENT_LIST_DIR}/${SPIRV_TOOLS}Target.cmake)\n"
     "if(TARGET ${SPIRV_TOOLS})\n"
     "    set(${SPIRV_TOOLS}_LIBRARIES ${SPIRV_TOOLS})\n"
-    "    get_target_property(${SPIRV_TOOLS}_INCLUDE_DIRS ${SPIRV_TOOLS} INTERFACE_INCLUDE_DIRECTORIES)\n"
+    "    get_target_property(${SPIRV_TOOLS}_INCLUDE_DIRS ${SPIRV_TOOLS_NS}${SPIRV_TOOLS} INTERFACE_INCLUDE_DIRECTORIES)\n"
     "endif()\n")
   install(FILES ${CMAKE_BINARY_DIR}/${SPIRV_TOOLS}Config.cmake DESTINATION ${PACKAGE_DIR})
 endif(ENABLE_SPIRV_TOOLS_INSTALL)
