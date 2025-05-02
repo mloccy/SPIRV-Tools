@@ -21,10 +21,12 @@ HunterGate(
     LOCAL)
 
 project(spirv-tools)
+option(SPIRV_SKIP_TESTS "Skip building tests" ON)
 
 hunter_add_package(SPIRV-Headers)
+hunter_add_package(python)
 if (NOT SPIRV_SKIP_TESTS)
-  hunter_add_package(python)
+  enable_testing()
   hunter_add_package(gtest)
 endif()
 
@@ -40,7 +42,6 @@ endif()
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-enable_testing()
 set(SPIRV_TOOLS "SPIRV-Tools")
 set(SPIRV_TOOLS_NS ${SPIRV_TOOLS}::)
 
@@ -56,7 +57,6 @@ if(${CMAKE_CXX_STANDARD} LESS 17)
   message(FATAL_ERROR "SPIRV-Tools requires C++17 or later, but is configured for C++${CMAKE_CXX_STANDARD})")
 endif()
 set(CMAKE_CXX_EXTENSIONS OFF)
-
 
 option(ENABLE_RTTI "Enables RTTI" OFF)
 option(SPIRV_ALLOW_TIMERS "Allow timers via clock_gettime on supported platforms" ON)
@@ -251,9 +251,8 @@ if(NOT COMMAND find_host_program)
 endif()
 
 # Tests require Python3
-if (NOT "${SPIRV_SKIP_TESTS}")
-  find_host_package(Python3 REQUIRED)
-endif()
+find_host_package(Python3 REQUIRED)
+
 # Check for symbol exports on Linux.
 # At the moment, this check will fail on the OSX build machines for the Android NDK.
 # It appears they don't have objdump.
@@ -333,11 +332,13 @@ endmacro(spvtools_pch)
 
 set (SPIRV-Headers_SOURCE_DIR "${SPIRV-HEADERS_ROOT}")
 
-find_package(GTest CONFIG REQUIRED)
-set (GTestMainTarget GTest::gtest_main)
-set (GTestTarget GTest::gtest)
-set (GMockTarget GTest::gmock)
-set (GMockMainTarget GTest::gmock_main)
+if(NOT ${SPIRV_SKIP_TESTS})
+  find_package(GTest CONFIG REQUIRED)
+  set (GTestMainTarget GTest::gtest_main)
+  set (GTestTarget GTest::gtest)
+  set (GMockTarget GTest::gmock)
+  set (GMockMainTarget GTest::gmock_main)
+endif()
 
 add_subdirectory(external)
 
