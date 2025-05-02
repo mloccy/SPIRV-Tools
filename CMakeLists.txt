@@ -14,7 +14,19 @@
 
 cmake_minimum_required(VERSION 3.22.1)
 
+include (cmake/HunterGate.cmake)
+HunterGate(
+    URL "https://github.com/mloccy/hunter/archive/refs/tags/v0.25.13.tar.gz"
+    SHA1 "7a7b3b035eadaae074fa16381290e771d9033b77"
+    LOCAL)
+
 project(spirv-tools)
+
+hunter_add_package(SPIRV-Headers)
+if (NOT SPIRV_SKIP_TESTS)
+  hunter_add_package(python)
+  hunter_add_package(gtest)
+endif()
 
 # Avoid a bug in CMake 3.22.1. By default it will set -std=c++11 for
 # targets in test/*, when those tests need -std=c++17.
@@ -30,6 +42,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 enable_testing()
 set(SPIRV_TOOLS "SPIRV-Tools")
+set(SPIRV_TOOLS_NS ${SPIRV_TOOLS}::)
 
 include(GNUInstallDirs)
 
@@ -317,6 +330,14 @@ macro(spvtools_pch SRCS PCHPREFIX)
   endif()
 endmacro(spvtools_pch)
 
+set (SPIRV-Headers_SOURCE_DIR "${SPIRV-HEADERS_ROOT}")
+
+find_package(GTest CONFIG REQUIRED)
+set (GTestMainTarget GTest::gtest_main)
+set (GTestTarget GTest::gtest)
+set (GMockTarget GTest::gmock)
+set (GMockMainTarget GTest::gmock_main)
+
 add_subdirectory(external)
 
 # Warning about extra semi-colons.
@@ -386,8 +407,8 @@ add_custom_command(
                       -DSPIRV_SHARED_LIBRARIES=${SPIRV_SHARED_LIBRARIES}
                       -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/write_pkg_config.cmake
         DEPENDS "CHANGES" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/SPIRV-Tools-shared.pc.in" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/write_pkg_config.cmake")
-add_custom_target(spirv-tools-pkg-config 
-        ALL 
+add_custom_target(spirv-tools-pkg-config
+        ALL
         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/SPIRV-Tools-shared.pc ${CMAKE_CURRENT_BINARY_DIR}/SPIRV-Tools.pc)
 
 # Install pkg-config file
