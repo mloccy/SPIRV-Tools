@@ -131,7 +131,7 @@ macro(spvtools_vendor_tables VENDOR_TABLE SHORT_NAME OPERAND_KIND_PREFIX)
   list(APPEND EXTINST_CPP_DEPENDS spv-tools-${SHORT_NAME})
 endmacro(spvtools_vendor_tables)
 
-macro(spvtools_extinst_lang_headers NAME GRAMMAR_FILE)
+macro(spvtools_extinst_lang_headers NAME TGTNAME GRAMMAR_FILE)
   set(OUT_H ${spirv-tools_BINARY_DIR}/${NAME}.h)
   add_custom_command(OUTPUT ${OUT_H}
     COMMAND Python3::Interpreter ${LANG_HEADER_PROCESSING_SCRIPT}
@@ -139,9 +139,9 @@ macro(spvtools_extinst_lang_headers NAME GRAMMAR_FILE)
       --extinst-output-path=${OUT_H}
     DEPENDS ${LANG_HEADER_PROCESSING_SCRIPT} ${GRAMMAR_FILE}
     COMMENT "Generate language specific header for ${NAME}.")
-  add_custom_target(spvth-${NAME} DEPENDS ${OUT_H})
-  set_property(TARGET spvth-${NAME} PROPERTY FOLDER "SPIRV-Tools build")
-  list(APPEND EXTINST_CPP_DEPENDS spvth-${NAME})
+  add_custom_target(spvth-${TGTNAME} DEPENDS ${OUT_H})
+  set_property(TARGET spvth-${TGTNAME} PROPERTY FOLDER "SPIRV-Tools build")
+  list(APPEND EXTINST_CPP_DEPENDS spvth-${TGTNAME})
 endmacro(spvtools_extinst_lang_headers)
 
 spvtools_core_tables("unified1")
@@ -157,9 +157,9 @@ spvtools_vendor_tables("opencl.debuginfo.100" "cldi100" "CLDEBUG100_")
 spvtools_vendor_tables("nonsemantic.shader.debuginfo.100" "shdi100" "SHDEBUG100_")
 spvtools_vendor_tables("nonsemantic.clspvreflection" "clspvreflection" "")
 spvtools_vendor_tables("nonsemantic.vkspreflection" "vkspreflection" "")
-spvtools_extinst_lang_headers("DebugInfo" ${DEBUGINFO_GRAMMAR_JSON_FILE})
-spvtools_extinst_lang_headers("OpenCLDebugInfo100" ${CLDEBUGINFO100_GRAMMAR_JSON_FILE})
-spvtools_extinst_lang_headers("NonSemanticShaderDebugInfo100" ${VKDEBUGINFO100_GRAMMAR_JSON_FILE})
+spvtools_extinst_lang_headers("DebugInfo" "DI" ${DEBUGINFO_GRAMMAR_JSON_FILE})
+spvtools_extinst_lang_headers("OpenCLDebugInfo100" "OCLDI" ${CLDEBUGINFO100_GRAMMAR_JSON_FILE})
+spvtools_extinst_lang_headers("NonSemanticShaderDebugInfo100" "NSSDI" ${VKDEBUGINFO100_GRAMMAR_JSON_FILE})
 
 spvtools_vimsyntax("unified1" "1.0")
 add_custom_target(spirv-tools-vimsyntax DEPENDS ${VIMSYNTAX_FILE})
