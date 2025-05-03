@@ -42,7 +42,7 @@ endif()
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-set(SPIRV_TOOLS "SPIRV-Tools")
+set(SPIRV_TOOLS ${PROJECT_NAME})
 set(SPIRV_TOOLS_NS ${SPIRV_TOOLS}::)
 
 include(GNUInstallDirs)
