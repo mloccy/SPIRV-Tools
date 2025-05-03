@@ -289,7 +289,7 @@ if(ENABLE_SPIRV_TOOLS_INSTALL)
       "find_dependency(${SPIRV_TOOLS})\n"
       "include(\${CMAKE_CURRENT_LIST_DIR}/${TARGET}Targets.cmake)\n"
       "set(${TARGET}_LIBRARIES ${TARGET})\n"
-      "get_target_property(${TARGET}_INCLUDE_DIRS ${TARGET} INTERFACE_INCLUDE_DIRECTORIES)\n")
+      "get_target_property(${TARGET}_INCLUDE_DIRS  ${SPIRV_TOOLS_NS}${TARGET} INTERFACE_INCLUDE_DIRECTORIES)\n")
   endmacro()
 endif()
 
