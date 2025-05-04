@@ -18,10 +18,10 @@ set(SPIRV_TOOLS_DIFF_SOURCES
   diff.cpp
 )
 
-add_library(SPIRV-Tools-diff ${SPIRV_TOOLS_LIBRARY_TYPE} ${SPIRV_TOOLS_DIFF_SOURCES})
+add_library(diff ${SPIRV_TOOLS_LIBRARY_TYPE} ${SPIRV_TOOLS_DIFF_SOURCES})
 
-spvtools_default_compile_options(SPIRV-Tools-diff)
-target_include_directories(SPIRV-Tools-diff
+spvtools_default_compile_options(diff)
+target_include_directories(diff
   PUBLIC
 	$<BUILD_INTERFACE:${spirv-tools_SOURCE_DIR}/include>
 	$<BUILD_INTERFACE:${SPIRV_HEADER_INCLUDE_DIR}>
@@ -29,23 +29,23 @@ target_include_directories(SPIRV-Tools-diff
   PRIVATE ${spirv-tools_BINARY_DIR}
 )
 # We need the assembling and disassembling functionalities in the main library.
-target_link_libraries(SPIRV-Tools-diff
+target_link_libraries(diff
   PUBLIC ${SPIRV_TOOLS_FULL_VISIBILITY})
 # We need the internals of spirv-opt.
-target_link_libraries(SPIRV-Tools-diff
-  PUBLIC SPIRV-Tools-opt)
+target_link_libraries(diff
+  PUBLIC opt)
 
-set_property(TARGET SPIRV-Tools-diff PROPERTY FOLDER "SPIRV-Tools libraries")
-spvtools_check_symbol_exports(SPIRV-Tools-diff)
+set_property(TARGET diff PROPERTY FOLDER "${SPIRV_TOOLS} libraries")
+spvtools_check_symbol_exports(diff)
 
 if(ENABLE_SPIRV_TOOLS_INSTALL)
-  install(TARGETS SPIRV-Tools-diff EXPORT SPIRV-Tools-diffTargets)
-  export(EXPORT SPIRV-Tools-diffTargets FILE SPIRV-Tools-diffTargets.cmake)
+  install(TARGETS diff EXPORT diffTargets)
+  export(EXPORT diffTargets FILE diffTargets.cmake)
 
-  spvtools_config_package_dir(SPIRV-Tools-diff PACKAGE_DIR)
-  install(EXPORT SPIRV-Tools-diffTargets FILE SPIRV-Tools-diffTargets.cmake
+  spvtools_config_package_dir(diff PACKAGE_DIR)
+  install(EXPORT diffTargets FILE diffTargets.cmake
   	DESTINATION ${PACKAGE_DIR})
 
-  spvtools_generate_config_file(SPIRV-Tools-diff)
-  install(FILES ${CMAKE_BINARY_DIR}/SPIRV-Tools-diffConfig.cmake DESTINATION ${PACKAGE_DIR})
+  spvtools_generate_config_file(diff)
+  install(FILES ${CMAKE_BINARY_DIR}/diffConfig.cmake DESTINATION ${PACKAGE_DIR})
 endif(ENABLE_SPIRV_TOOLS_INSTALL)

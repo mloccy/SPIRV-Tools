@@ -139,6 +139,6 @@ if (${SPIRV_BUILD_FUZZER})
 
   add_spvtools_unittest(TARGET fuzz
         SRCS ${SOURCES}
-        LIBS SPIRV-Tools-fuzz
+        LIBS ${SPIRV_TOOLS}-fuzz
         )
 endif()

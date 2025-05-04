@@ -42,15 +42,15 @@ endfunction()
 set(COMMON_TOOLS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/util/flags.cpp")
 
 if (NOT ${SPIRV_SKIP_EXECUTABLES})
-  add_spvtools_tool(TARGET spirv-diff SRCS ${COMMON_TOOLS_SRCS} diff/diff.cpp util/cli_consumer.cpp io.cpp LIBS SPIRV-Tools-diff SPIRV-Tools-opt ${SPIRV_TOOLS_FULL_VISIBILITY})
+  add_spvtools_tool(TARGET spirv-diff SRCS ${COMMON_TOOLS_SRCS} diff/diff.cpp util/cli_consumer.cpp io.cpp LIBS diff opt ${SPIRV_TOOLS_FULL_VISIBILITY})
   add_spvtools_tool(TARGET spirv-dis  SRCS ${COMMON_TOOLS_SRCS} dis/dis.cpp io.cpp LIBS ${SPIRV_TOOLS_FULL_VISIBILITY})
   add_spvtools_tool(TARGET spirv-val  SRCS ${COMMON_TOOLS_SRCS} val/val.cpp util/cli_consumer.cpp io.cpp LIBS ${SPIRV_TOOLS_FULL_VISIBILITY})
-  add_spvtools_tool(TARGET spirv-opt  SRCS ${COMMON_TOOLS_SRCS} opt/opt.cpp util/cli_consumer.cpp io.cpp LIBS SPIRV-Tools-opt ${SPIRV_TOOLS_FULL_VISIBILITY})
+  add_spvtools_tool(TARGET spirv-opt  SRCS ${COMMON_TOOLS_SRCS} opt/opt.cpp util/cli_consumer.cpp io.cpp LIBS opt ${SPIRV_TOOLS_FULL_VISIBILITY})
   if(NOT (${CMAKE_SYSTEM_NAME} STREQUAL "iOS")) # iOS does not allow std::system calls which spirv-reduce requires
-    add_spvtools_tool(TARGET spirv-reduce SRCS ${COMMON_TOOLS_SRCS} reduce/reduce.cpp util/cli_consumer.cpp io.cpp LIBS SPIRV-Tools-reduce ${SPIRV_TOOLS_FULL_VISIBILITY})
+    add_spvtools_tool(TARGET spirv-reduce SRCS ${COMMON_TOOLS_SRCS} reduce/reduce.cpp util/cli_consumer.cpp io.cpp LIBS reduce ${SPIRV_TOOLS_FULL_VISIBILITY})
   endif()
-  add_spvtools_tool(TARGET spirv-link SRCS ${COMMON_TOOLS_SRCS} link/linker.cpp io.cpp LIBS SPIRV-Tools-link ${SPIRV_TOOLS_FULL_VISIBILITY})
-  add_spvtools_tool(TARGET spirv-lint SRCS ${COMMON_TOOLS_SRCS} lint/lint.cpp util/cli_consumer.cpp io.cpp LIBS SPIRV-Tools-lint SPIRV-Tools-opt ${SPIRV_TOOLS_FULL_VISIBILITY})
+  add_spvtools_tool(TARGET spirv-link SRCS ${COMMON_TOOLS_SRCS} link/linker.cpp io.cpp LIBS link ${SPIRV_TOOLS_FULL_VISIBILITY})
+  add_spvtools_tool(TARGET spirv-lint SRCS ${COMMON_TOOLS_SRCS} lint/lint.cpp util/cli_consumer.cpp io.cpp LIBS lint opt ${SPIRV_TOOLS_FULL_VISIBILITY})
   add_spvtools_tool(TARGET spirv-as
                     SRCS as/as.cpp
                          io.cpp
@@ -88,24 +88,24 @@ if (NOT ${SPIRV_SKIP_EXECUTABLES})
   endif()
 
   if(SPIRV_BUILD_FUZZER)
-    add_spvtools_tool(TARGET spirv-fuzz SRCS fuzz/fuzz.cpp util/cli_consumer.cpp io.cpp LIBS SPIRV-Tools-fuzz ${SPIRV_TOOLS_FULL_VISIBILITY})
+    add_spvtools_tool(TARGET spirv-fuzz SRCS fuzz/fuzz.cpp util/cli_consumer.cpp io.cpp LIBS ${SPIRV_TOOLS}-fuzz ${SPIRV_TOOLS_FULL_VISIBILITY})
     set(SPIRV_INSTALL_TARGETS ${SPIRV_INSTALL_TARGETS} spirv-fuzz)
   endif(SPIRV_BUILD_FUZZER)
 
   if(ENABLE_SPIRV_TOOLS_INSTALL)
-    install(TARGETS ${SPIRV_INSTALL_TARGETS} EXPORT SPIRV-Tools-toolsTargets)
-    export(EXPORT SPIRV-Tools-toolsTargets FILE SPIRV-Tools-toolsTargets.cmake)
+    install(TARGETS ${SPIRV_INSTALL_TARGETS} EXPORT ${SPIRV_TOOLS}-toolsTargets)
+    export(EXPORT ${SPIRV_TOOLS}-toolsTargets FILE ${SPIRV_TOOLS}-toolsTargets.cmake)
 
-    spvtools_config_package_dir(SPIRV-Tools-tools PACKAGE_DIR)
-    install(EXPORT SPIRV-Tools-toolsTargets FILE SPIRV-Tools-toolsTargets.cmake
+    spvtools_config_package_dir(${SPIRV_TOOLS}-tools PACKAGE_DIR)
+    install(EXPORT ${SPIRV_TOOLS}-toolsTargets FILE ${SPIRV_TOOLS}-toolsTargets.cmake
             DESTINATION ${PACKAGE_DIR})
 
-    file(WRITE ${CMAKE_BINARY_DIR}/SPIRV-Tools-toolsConfig.cmake
+    file(WRITE ${CMAKE_BINARY_DIR}/${SPIRV_TOOLS}-toolsConfig.cmake
       "include(CMakeFindDependencyMacro)\n"
       "find_dependency(${SPIRV_TOOLS})\n"
-      "include(\${CMAKE_CURRENT_LIST_DIR}/SPIRV-Tools-toolsTargets.cmake)\n"
+      "include(\${CMAKE_CURRENT_LIST_DIR}/${SPIRV_TOOLS}-toolsTargets.cmake)\n"
       )
 
-    install(FILES ${CMAKE_BINARY_DIR}/SPIRV-Tools-toolsConfig.cmake DESTINATION ${PACKAGE_DIR})
+    install(FILES ${CMAKE_BINARY_DIR}/${SPIRV_TOOLS}-toolsConfig.cmake DESTINATION ${PACKAGE_DIR})
   endif(ENABLE_SPIRV_TOOLS_INSTALL)
 endif()

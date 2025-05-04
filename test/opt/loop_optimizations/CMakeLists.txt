@@ -37,6 +37,6 @@ add_spvtools_unittest(TARGET opt_loops
        unroll_assumptions.cpp
        unroll_simple.cpp
        unswitch.cpp
-  LIBS SPIRV-Tools-opt
+  LIBS opt
   PCH_FILE pch_test_opt_loop
 )

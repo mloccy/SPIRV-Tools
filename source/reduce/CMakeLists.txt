@@ -82,10 +82,10 @@ endif()
 
 spvtools_pch(SPIRV_TOOLS_REDUCE_SOURCES pch_source_reduce)
 
-add_library(SPIRV-Tools-reduce ${SPIRV_TOOLS_LIBRARY_TYPE} ${SPIRV_TOOLS_REDUCE_SOURCES})
+add_library(reduce ${SPIRV_TOOLS_LIBRARY_TYPE} ${SPIRV_TOOLS_REDUCE_SOURCES})
 
-spvtools_default_compile_options(SPIRV-Tools-reduce)
-target_include_directories(SPIRV-Tools-reduce
+spvtools_default_compile_options(reduce)
+target_include_directories(reduce
   PUBLIC
 	$<BUILD_INTERFACE:${spirv-tools_SOURCE_DIR}/include>
 	$<BUILD_INTERFACE:${SPIRV_HEADER_INCLUDE_DIR}>
@@ -93,22 +93,22 @@ target_include_directories(SPIRV-Tools-reduce
   PRIVATE ${spirv-tools_BINARY_DIR}
 )
 # The reducer reuses a lot of functionality from the SPIRV-Tools library.
-target_link_libraries(SPIRV-Tools-reduce
+target_link_libraries(reduce
   PUBLIC ${SPIRV_TOOLS_FULL_VISIBILITY}
-  PUBLIC SPIRV-Tools-opt)
+  PUBLIC opt)
 
-set_property(TARGET SPIRV-Tools-reduce PROPERTY FOLDER "SPIRV-Tools libraries")
-spvtools_check_symbol_exports(SPIRV-Tools-reduce)
+set_property(TARGET reduce PROPERTY FOLDER "SPIRV-Tools libraries")
+spvtools_check_symbol_exports(reduce)
 
 if(ENABLE_SPIRV_TOOLS_INSTALL)
-  install(TARGETS SPIRV-Tools-reduce EXPORT SPIRV-Tools-reduceTargets)
-  export(EXPORT SPIRV-Tools-reduceTargets FILE SPIRV-Tools-reduceTarget.cmake)
+  install(TARGETS reduce EXPORT reduceTargets)
+  export(EXPORT reduceTargets FILE reduceTarget.cmake)
 
-  spvtools_config_package_dir(SPIRV-Tools-reduce PACKAGE_DIR)
-  install(EXPORT SPIRV-Tools-reduceTargets FILE SPIRV-Tools-reduceTarget.cmake
+  spvtools_config_package_dir(reduce PACKAGE_DIR)
+  install(EXPORT reduceTargets FILE reduceTarget.cmake
     NAMESPACE ${SPIRV_TOOLS_NS}
   	DESTINATION ${PACKAGE_DIR})
 
-  spvtools_generate_config_file(SPIRV-Tools-reduce)
-  install(FILES ${CMAKE_BINARY_DIR}/SPIRV-Tools-reduceConfig.cmake DESTINATION ${PACKAGE_DIR})
+  spvtools_generate_config_file(reduce)
+  install(FILES ${CMAKE_BINARY_DIR}/reduceConfig.cmake DESTINATION ${PACKAGE_DIR})
 endif(ENABLE_SPIRV_TOOLS_INSTALL)

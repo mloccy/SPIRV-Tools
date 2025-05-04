@@ -256,10 +256,10 @@ endif()
 
 spvtools_pch(SPIRV_TOOLS_OPT_SOURCES pch_source_opt)
 
-add_library(SPIRV-Tools-opt ${SPIRV_TOOLS_LIBRARY_TYPE} ${SPIRV_TOOLS_OPT_SOURCES})
+add_library(opt ${SPIRV_TOOLS_LIBRARY_TYPE} ${SPIRV_TOOLS_OPT_SOURCES})
 
-spvtools_default_compile_options(SPIRV-Tools-opt)
-target_include_directories(SPIRV-Tools-opt
+spvtools_default_compile_options(opt)
+target_include_directories(opt
   PUBLIC
 	$<BUILD_INTERFACE:${spirv-tools_SOURCE_DIR}/include>
 	$<BUILD_INTERFACE:${SPIRV_HEADER_INCLUDE_DIR}>
@@ -267,21 +267,8 @@ target_include_directories(SPIRV-Tools-opt
   PRIVATE ${spirv-tools_BINARY_DIR}
 )
 # We need the assembling and disassembling functionalities in the main library.
-target_link_libraries(SPIRV-Tools-opt
+target_link_libraries(opt
   PUBLIC ${SPIRV_TOOLS_FULL_VISIBILITY})
 
-set_property(TARGET SPIRV-Tools-opt PROPERTY FOLDER "SPIRV-Tools libraries")
-spvtools_check_symbol_exports(SPIRV-Tools-opt)
-
-if(ENABLE_SPIRV_TOOLS_INSTALL)
-  install(TARGETS SPIRV-Tools-opt EXPORT SPIRV-Tools-optTargets)
-  export(EXPORT SPIRV-Tools-optTargets FILE SPIRV-Tools-optTargets.cmake)
-
-  spvtools_config_package_dir(SPIRV-Tools-opt PACKAGE_DIR)
-  install(EXPORT SPIRV-Tools-optTargets FILE SPIRV-Tools-optTargets.cmake
-    NAMESPACE ${SPIRV_TOOLS_NS}
-  	DESTINATION ${PACKAGE_DIR})
-
-  spvtools_generate_config_file(SPIRV-Tools-opt)
-  install(FILES ${CMAKE_BINARY_DIR}/SPIRV-Tools-optConfig.cmake DESTINATION ${PACKAGE_DIR})
-endif(ENABLE_SPIRV_TOOLS_INSTALL)
+set_property(TARGET opt PROPERTY FOLDER "SPIRV-Tools libraries")
+spvtools_check_symbol_exports(opt)

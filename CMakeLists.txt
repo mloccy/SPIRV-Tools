@@ -22,7 +22,7 @@ HunterGate(
 
 project(spirv-tools)
 option(SPIRV_SKIP_TESTS "Skip building tests" ON)
-
+option(ENABLE_SPIRV_TOOLS_INSTALL "Install SPIRV Tools" ON)
 hunter_add_package(SPIRV-Headers)
 hunter_add_package(python)
 if (NOT SPIRV_SKIP_TESTS)
@@ -380,45 +380,45 @@ if (NOT "${SPIRV_SKIP_TESTS}")
            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
-set(SPIRV_LIBRARIES "-lSPIRV-Tools-opt -lSPIRV-Tools -lSPIRV-Tools-link")
-set(SPIRV_SHARED_LIBRARIES "-lSPIRV-Tools-shared")
+set(SPIRV_LIBRARIES "-lopt -l${SPIRV_TOOLS} -llink")
+set(SPIRV_SHARED_LIBRARIES "-l${SPIRV_TOOLS}-shared")
 
 # Build pkg-config file
 # Use a first-class target so it's regenerated when relevant files are updated.
 add_custom_command(
-        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/SPIRV-Tools.pc
+        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${SPIRV_TOOLS}.pc
         COMMAND ${CMAKE_COMMAND}
                       -DCHANGES_FILE=${CMAKE_CURRENT_SOURCE_DIR}/CHANGES
-                      -DTEMPLATE_FILE=${CMAKE_CURRENT_SOURCE_DIR}/cmake/SPIRV-Tools.pc.in
-                      -DOUT_FILE=${CMAKE_CURRENT_BINARY_DIR}/SPIRV-Tools.pc
+                      -DTEMPLATE_FILE=${CMAKE_CURRENT_SOURCE_DIR}/cmake/${SPIRV_TOOLS}.pc.in
+                      -DOUT_FILE=${CMAKE_CURRENT_BINARY_DIR}/${SPIRV_TOOLS}.pc
                       -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                       -DCMAKE_INSTALL_LIBDIR=${CMAKE_INSTALL_LIBDIR}
                       -DCMAKE_INSTALL_INCLUDEDIR=${CMAKE_INSTALL_INCLUDEDIR}
                       -DSPIRV_LIBRARIES=${SPIRV_LIBRARIES}
                       -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/write_pkg_config.cmake
-        DEPENDS "CHANGES" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/SPIRV-Tools.pc.in" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/write_pkg_config.cmake")
+        DEPENDS "CHANGES" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${SPIRV_TOOLS}.pc.in" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/write_pkg_config.cmake")
 add_custom_command(
-        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/SPIRV-Tools-shared.pc
+        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${SPIRV_TOOLS}-shared.pc
         COMMAND ${CMAKE_COMMAND}
                       -DCHANGES_FILE=${CMAKE_CURRENT_SOURCE_DIR}/CHANGES
-                      -DTEMPLATE_FILE=${CMAKE_CURRENT_SOURCE_DIR}/cmake/SPIRV-Tools-shared.pc.in
-                      -DOUT_FILE=${CMAKE_CURRENT_BINARY_DIR}/SPIRV-Tools-shared.pc
+                      -DTEMPLATE_FILE=${CMAKE_CURRENT_SOURCE_DIR}/cmake/${SPIRV_TOOLS}-shared.pc.in
+                      -DOUT_FILE=${CMAKE_CURRENT_BINARY_DIR}/${SPIRV_TOOLS}-shared.pc
                       -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                       -DCMAKE_INSTALL_LIBDIR=${CMAKE_INSTALL_LIBDIR}
                       -DCMAKE_INSTALL_INCLUDEDIR=${CMAKE_INSTALL_INCLUDEDIR}
                       -DSPIRV_SHARED_LIBRARIES=${SPIRV_SHARED_LIBRARIES}
                       -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/write_pkg_config.cmake
-        DEPENDS "CHANGES" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/SPIRV-Tools-shared.pc.in" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/write_pkg_config.cmake")
+        DEPENDS "CHANGES" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${SPIRV_TOOLS}-shared.pc.in" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/write_pkg_config.cmake")
 add_custom_target(spirv-tools-pkg-config
         ALL
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/SPIRV-Tools-shared.pc ${CMAKE_CURRENT_BINARY_DIR}/SPIRV-Tools.pc)
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${SPIRV_TOOLS}-shared.pc ${CMAKE_CURRENT_BINARY_DIR}/${SPIRV_TOOLS}.pc)
 
 # Install pkg-config file
 if (ENABLE_SPIRV_TOOLS_INSTALL)
   install(
     FILES
-      ${CMAKE_CURRENT_BINARY_DIR}/SPIRV-Tools.pc
-      ${CMAKE_CURRENT_BINARY_DIR}/SPIRV-Tools-shared.pc
+      ${CMAKE_CURRENT_BINARY_DIR}/${SPIRV_TOOLS}.pc
+      ${CMAKE_CURRENT_BINARY_DIR}/${SPIRV_TOOLS}-shared.pc
     DESTINATION
       ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 endif()

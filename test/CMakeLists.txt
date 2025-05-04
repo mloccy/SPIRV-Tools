@@ -180,7 +180,7 @@ add_spvtools_unittest(
 add_spvtools_unittest(
   TARGET cpp_interface
   SRCS cpp_interface_test.cpp
-  LIBS SPIRV-Tools-opt)
+  LIBS opt)
 
 if (${SPIRV_TIMER_ENABLED})
 add_spvtools_unittest(

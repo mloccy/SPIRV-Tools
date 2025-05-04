@@ -32,6 +32,5 @@ add_spvtools_unittest(TARGET reduce
         structured_loop_to_selection_test.cpp
         validation_during_reduction_test.cpp
         ${spirv-tools_SOURCE_DIR}/tools/io.cpp
-        LIBS SPIRV-Tools-reduce
+        LIBS reduce
         )
-

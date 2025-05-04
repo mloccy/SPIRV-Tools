@@ -115,7 +115,7 @@ add_spvtools_unittest(TARGET opt
        vector_dce_test.cpp
        workaround1209_test.cpp
        wrap_opkill_test.cpp
-  LIBS SPIRV-Tools-opt
+  LIBS opt
   PCH_FILE pch_test_opt
 )
 if (NOT "${SPIRV_SKIP_TESTS}" AND TARGET gmock_main)

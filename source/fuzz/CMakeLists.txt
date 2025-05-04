@@ -438,9 +438,9 @@ if(SPIRV_BUILD_FUZZER)
 
   spvtools_pch(SPIRV_TOOLS_FUZZ_SOURCES pch_source_fuzz)
 
-  add_library(SPIRV-Tools-fuzz ${SPIRV_TOOLS_FUZZ_SOURCES})
+  add_library(${SPIRV_TOOLS}-fuzz ${SPIRV_TOOLS_FUZZ_SOURCES})
 
-  spvtools_default_compile_options(SPIRV-Tools-fuzz)
+  spvtools_default_compile_options(${SPIRV_TOOLS}-fuzz)
 
   # Compilation of the auto-generated protobuf source file will yield warnings,
   # which we have no control over and thus wish to ignore.
@@ -451,7 +451,7 @@ if(SPIRV_BUILD_FUZZER)
     set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/protobufs/spvtoolsfuzz.pb.cc PROPERTIES COMPILE_FLAGS /w)
   endif()
 
-  target_include_directories(SPIRV-Tools-fuzz
+  target_include_directories(${SPIRV_TOOLS}-fuzz
 		PUBLIC
 			$<BUILD_INTERFACE:${spirv-tools_SOURCE_DIR}/include>
 			$<BUILD_INTERFACE:${SPIRV_HEADER_INCLUDE_DIR}>
@@ -460,26 +460,26 @@ if(SPIRV_BUILD_FUZZER)
         PRIVATE ${CMAKE_BINARY_DIR})
 
   # The fuzzer reuses a lot of functionality from the SPIRV-Tools library.
-  target_link_libraries(SPIRV-Tools-fuzz
+  target_link_libraries(${SPIRV_TOOLS}-fuzz
         PUBLIC ${SPIRV_TOOLS_FULL_VISIBILITY}
-        PUBLIC SPIRV-Tools-opt
-        PUBLIC SPIRV-Tools-reduce
+        PUBLIC opt
+        PUBLIC reduce
         PUBLIC protobuf::libprotobuf)
 
-  set_property(TARGET SPIRV-Tools-fuzz PROPERTY FOLDER "SPIRV-Tools libraries")
-  spvtools_check_symbol_exports(SPIRV-Tools-fuzz)
+  set_property(TARGET ${SPIRV_TOOLS}-fuzz PROPERTY FOLDER "SPIRV-Tools libraries")
+  spvtools_check_symbol_exports(${SPIRV_TOOLS}-fuzz)
 
   if(ENABLE_SPIRV_TOOLS_INSTALL)
-      install(TARGETS SPIRV-Tools-fuzz EXPORT SPIRV-Tools-fuzzTargets)
-      export(EXPORT SPIRV-Tools-fuzzTargets FILE SPIRV-Tools-fuzzTarget.cmake)
+      install(TARGETS ${SPIRV_TOOLS}-fuzz EXPORT ${SPIRV_TOOLS}-fuzzTargets)
+      export(EXPORT ${SPIRV_TOOLS}-fuzzTargets FILE ${SPIRV_TOOLS}-fuzzTarget.cmake)
 
-      spvtools_config_package_dir(SPIRV-Tools-fuzz PACKAGE_DIR)
-      install(EXPORT SPIRV-Tools-fuzzTargets FILE SPIRV-Tools-fuzzTarget.cmake
+      spvtools_config_package_dir(${SPIRV_TOOLS}-fuzz PACKAGE_DIR)
+      install(EXPORT ${SPIRV_TOOLS}-fuzzTargets FILE ${SPIRV_TOOLS}-fuzzTarget.cmake
             NAMESPACE ${SPIRV_TOOLS_NS}
             DESTINATION ${PACKAGE_DIR})
 
-      spvtools_generate_config_file(SPIRV-Tools-fuzz)
-      install(FILES ${CMAKE_BINARY_DIR}/SPIRV-Tools-fuzzConfig.cmake DESTINATION ${PACKAGE_DIR})
+      spvtools_generate_config_file(${SPIRV_TOOLS}-fuzz)
+      install(FILES ${CMAKE_BINARY_DIR}/${SPIRV_TOOLS}-fuzzConfig.cmake DESTINATION ${PACKAGE_DIR})
   endif(ENABLE_SPIRV_TOOLS_INSTALL)
 
 endif(SPIRV_BUILD_FUZZER)

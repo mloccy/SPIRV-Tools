@@ -413,6 +413,18 @@ else()
   set(SPIRV_TOOLS_TARGETS ${SPIRV_TOOLS} ${SPIRV_TOOLS}-shared)
 endif()
 
+list(APPEND
+  SPIRV_TOOLS_TARGETS
+  opt
+  diff
+  link
+  lint
+  reduce)
+
+if (SPIRV_BUILD_FUZZER)
+  list(APPEND SPIRV_TOOLS_TARGETS ${SPIRV_TOOLS}-fuzz)
+endif()
+
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
   find_library(LIBRT rt)
   if(LIBRT)
@@ -427,6 +439,7 @@ if(ENABLE_SPIRV_TOOLS_INSTALL)
   export(EXPORT ${SPIRV_TOOLS}Targets FILE ${SPIRV_TOOLS}Target.cmake)
 
   spvtools_config_package_dir(${SPIRV_TOOLS} PACKAGE_DIR)
+
   install(EXPORT ${SPIRV_TOOLS}Targets FILE ${SPIRV_TOOLS}Target.cmake NAMESPACE ${SPIRV_TOOLS_NS} DESTINATION ${PACKAGE_DIR})
 
   # Special config file for root library compared to other libs.

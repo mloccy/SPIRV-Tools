@@ -15,5 +15,5 @@
 add_spvtools_example(
   TARGET spirv-tools-cpp-example
   SRCS main.cpp
-  LIBS SPIRV-Tools-opt
+  LIBS opt
 )

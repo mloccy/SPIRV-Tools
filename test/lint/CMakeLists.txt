@@ -14,5 +14,5 @@
 
 add_spvtools_unittest(TARGET lint
   SRCS divergence_analysis_test.cpp
-  LIBS SPIRV-Tools-lint SPIRV-Tools-opt
+  LIBS lint opt
 )

@@ -19,5 +19,5 @@ add_spvtools_unittest(
     ${spirv-tools_SOURCE_DIR}/tools/util/flags.cpp
     ${spirv-tools_SOURCE_DIR}/tools/util/cli_consumer.cpp
     ${spirv-tools_SOURCE_DIR}/tools/objdump/extract_source.cpp
-    LIBS ${SPIRV_TOOLS_FULL_VISIBILITY} SPIRV-Tools-opt
+    LIBS ${SPIRV_TOOLS_FULL_VISIBILITY} opt
   DEFINES TESTING=1)
