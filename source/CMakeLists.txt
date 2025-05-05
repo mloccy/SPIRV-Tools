@@ -422,7 +422,7 @@ list(APPEND
   reduce)
 
 if (SPIRV_BUILD_FUZZER)
-  list(APPEND SPIRV_TOOLS_TARGETS ${SPIRV_TOOLS}-fuzz)
+  list(APPEND SPIRV_TOOLS_TARGETS fuzz)
 endif()
 
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")

@@ -16,8 +16,8 @@ cmake_minimum_required(VERSION 3.22.1)
 
 include (cmake/HunterGate.cmake)
 HunterGate(
-    URL "https://github.com/mloccy/hunter/archive/refs/tags/v0.25.13.tar.gz"
-    SHA1 "7a7b3b035eadaae074fa16381290e771d9033b77"
+    URL "https://github.com/mloccy/hunter/archive/refs/tags/v0.25.12.tar.gz"
+    SHA1 "7882c0154119ee8b56ee61a4165a5afd90b79c66"
     LOCAL)
 
 project(spirv-tools)
